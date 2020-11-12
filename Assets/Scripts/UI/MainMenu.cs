@@ -4,11 +4,22 @@ using UnityEngine;
 using Zenject;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using Button = UnityEngine.UI.Button;
 
 public class MainMenu : MonoBehaviour
 { 
     [Inject] SerializationManager _SerializationManager;
-     
+    [SerializeField] Button[] SavingButtons;
+
+    private void Awake()
+    {
+#if UNITY_WEBGL
+        for (int i = 0; i < SavingButtons.Length; i++)
+        {
+            SavingButtons[i].gameObject.SetActive(false);
+        }
+#endif
+    }
 
     public void Activate(bool to)
     {

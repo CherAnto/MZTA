@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
+using static SerializationManager;
 
 public class FieldManager : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class FieldManager : MonoBehaviour
     [Inject] InputManager _InputManager; 
     [Inject] DiContainer _Container;
     [Inject] Pool<FieldItem> _itemPool;
+    [Inject] SerializationManager _SerializationManager;
 
     public List<IFieldable> Selected => new List<IFieldable>(selected);
     [SerializeField] List<IFieldable> selected = new List<IFieldable>();
@@ -40,6 +42,21 @@ public class FieldManager : MonoBehaviour
         Select(toSelect, !selected.Contains(toSelect), _InputManager.shiftActive);
         onSelect?.Invoke();
     } 
+
+    public void Load(List<JSONfieldObject> objs)
+    {
+        for (int i = 0; i < objs.Count; i++)
+        {
+            JSONfieldObject current = objs[i];
+            Sprite sprite;
+            _SerializationManager.allSprites.TryGetValue(current.spriteName, out sprite);
+            if (sprite == null) {
+                Debug.LogError($"Unknown sprite: {current.spriteName}");
+                continue; 
+            }
+            CreateFieldItem(sprite, current.scale, current.position, current.pixelSize);
+        }
+    }
 
     void Select(IFieldable toSelect, bool state, bool additive)
     {
@@ -149,9 +166,7 @@ public class FieldManager : MonoBehaviour
     }
 
     void CalculateFieldCoords() {
-        (Vector2,Vector2) sizes = _UImanager.CalculateFieldSize();
-        Debug.LogError(sizes.Item1);
-        Debug.LogError(sizes.Item2);
+        (Vector2,Vector2) sizes = _UImanager.CalculateFieldSize(); 
     }
 
 }

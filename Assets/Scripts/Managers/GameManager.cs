@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     [Inject] UImanager _UImanager;
     [Inject] FieldManager _FieldManager; 
     [Inject] Prefab_Refs _Prefab_Refs;
+    [Inject] SerializationManager _SerializationManager;
 
     public System.Action onUpdate;
      
@@ -17,7 +18,8 @@ public class GameManager : MonoBehaviour
         //Room for manuevers: perhaps scene-based initialization, etc
         _InputManager.Initialize(true);
         _FieldManager.Initialize(true);
-        _UImanager.Initialize(true); 
+        _UImanager.Initialize(true);
+        _SerializationManager.Initialize();
     }
      
     void Update()
