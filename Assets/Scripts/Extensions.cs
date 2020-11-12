@@ -10,4 +10,11 @@ public static class Extensions
         color =  new Color(color.r, color.g, color.b, newA);
         return color;
     }
+     
+    public static Vector3 FromScreenToWorldCoords(this Vector2 vec, Camera camera = null)
+    {
+        if (camera == null)
+            camera = Camera.main;
+        return camera.ScreenToWorldPoint(vec);
+    }
 }

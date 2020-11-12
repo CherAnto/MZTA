@@ -54,13 +54,6 @@ public class SpriteList : MonoBehaviour
         //    Debug.LogError(errText);
         //    brokenButtons.Add(current.gameObject); 
         //}
-    }
-
-    public void SpawnSprite(Sprite sprite)
-    {
-        Debug.LogError("SPAWN");
-
-        _FieldManager.CreateFieldItem(_InputManager.mousePosition);
-    }
+    } 
 
 }

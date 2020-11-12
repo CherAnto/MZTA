@@ -7,7 +7,8 @@ public class GameManager : MonoBehaviour
 {
     [Inject] InputManager _InputManager;
     [Inject] UImanager _UImanager;
-    [Inject] FieldManager _FieldManager;
+    [Inject] FieldManager _FieldManager; 
+    [Inject] Prefab_Refs _Prefab_Refs;
 
     public System.Action onUpdate;
      
@@ -16,7 +17,7 @@ public class GameManager : MonoBehaviour
         //Room for manuevers: perhaps scene-based initialization, etc
         _InputManager.Initialize(true);
         _FieldManager.Initialize(true);
-        _UImanager.Initialize(true);
+        _UImanager.Initialize(true); 
     }
      
     void Update()

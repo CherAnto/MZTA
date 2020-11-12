@@ -6,8 +6,8 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 
 public class MainMenu : MonoBehaviour
-{
-    [Inject] Prefab_Refs ui_Refs;
+{ 
+    [Inject] SerializationManager _SerializationManager;
      
 
     public void Activate(bool to)
@@ -29,8 +29,11 @@ public class MainMenu : MonoBehaviour
 
     public void InitiateSaving()
     {
+        _SerializationManager.CreateJSON();
+
         SaveFileDialog save = new SaveFileDialog();
         save.ShowDialog();
+        //save.
     }
 
     public void InitiateLoading()
