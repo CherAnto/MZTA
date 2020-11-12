@@ -1,11 +1,12 @@
-﻿using System.Collections;
+﻿using SFB;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using System.Windows.Forms;
+using System.Runtime.InteropServices;
+using System.Text; 
 using UnityEditor;
 using UnityEngine;
-using Zenject;
+using Zenject; 
 
 public class SerializationManager : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class SerializationManager : MonoBehaviour
     [SerializeField] int SpritesNumber;
 
     [Inject] FieldManager _FieldManager;
-    public IReadOnlyDictionary<string,Sprite> allSprites;
+    public IReadOnlyDictionary<string,Sprite> allSprites; 
 
     public async void Initialize()
     { 
@@ -42,49 +43,81 @@ public class SerializationManager : MonoBehaviour
     public void Save()
     {
         string json = CreateJSON();
-        //string path = EditorUtility.OpenFilePanel("new save", "", ".txt");
-        SaveFileDialog saveFileDialog = new SaveFileDialog();
-        saveFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
-        saveFileDialog.Title = "Create a save file";
-        saveFileDialog.FileName = "new save";
-        if (saveFileDialog.ShowDialog() == DialogResult.OK)
-        { 
-            System.IO.FileStream fs =
-                (System.IO.FileStream)saveFileDialog.OpenFile();
-            using (StreamWriter writer = new StreamWriter(fs))
+        //string path = EditorUtility.OpenFilePanel("new save", "", ".txt"); 
+        string path = StandaloneFileBrowser.SaveFilePanel("Save File", Application.dataPath, "new save", "txt");// (string path) => {
+             
+            using (StreamWriter writer = new StreamWriter(path))
             {
                 writer.Write(json);
-            }
-            fs.Close();
-        } 
+            }  
+
+        //});
+
+        //if(saveFileDialog == null)
+        //{
+        //    Debug.LogError("Dialog is null");
+        //    return;
+        //}
+        //if (saveFileDialog.ShowDialog() == DialogResult.Cancel)
+        //    return;
+        //if (saveFileDialog.ShowDialog() == DialogResult.OK)
+        //{ 
+        //    System.IO.FileStream fs =
+        //        (System.IO.FileStream)saveFileDialog.OpenFile();
+        //    using (StreamWriter writer = new StreamWriter(fs))
+        //    {
+        //        writer.Write(json);
+        //    }
+        //    fs.Close();
+        //} 
     }
 
     public void Load()
     {
-        OpenFileDialog openFileDialog = new OpenFileDialog();
-        openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
-        openFileDialog.Title = "Save an Image File";
-        if (openFileDialog.ShowDialog() == DialogResult.OK)
-        {
-            if (openFileDialog.FileName != "")
+
+        StandaloneFileBrowser.OpenFilePanelAsync("Open File", Application.dataPath, "txt", false, (string[] path) => {
+
+            using (StreamReader reader = new StreamReader(path[0]))
             {
-                var fStream = openFileDialog.OpenFile();
-                using (StreamReader reader = new StreamReader(fStream))
+                var fileContent = reader.ReadToEnd();
+                try
                 {
-                    var fileContent = reader.ReadToEnd();
-                    try
-                    {
-                        JSONarray<JSONfieldObject> arrayObj = JsonUtility.FromJson<JSONarray<JSONfieldObject>>(fileContent); 
-                        _FieldManager.Load(arrayObj.objects);
-                    }
-                    catch (System.Exception e)
-                    {
-                        Debug.LogError(fileContent);
-                        Debug.LogError($"Cannot read JSON: {openFileDialog.FileName} {e.Message}" );
-                    }
-                }  
+                    JSONarray<JSONfieldObject> arrayObj = JsonUtility.FromJson<JSONarray<JSONfieldObject>>(fileContent);
+                    _FieldManager.Load(arrayObj.objects);
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError(fileContent);
+                    Debug.LogError($"Cannot read JSON: {path[0]} {e.Message}");
+                }
             }
-        }
+
+        });
+
+        //OpenFileDialog openFileDialog = new OpenFileDialog();
+        //openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+        //openFileDialog.Title = "Save an Image File";
+        //if (openFileDialog.ShowDialog() == DialogResult.OK)
+        //{
+        //    if (openFileDialog.FileName != "")
+        //    {
+        //        var fStream = openFileDialog.OpenFile();
+        //        using (StreamReader reader = new StreamReader(fStream))
+        //        {
+        //            var fileContent = reader.ReadToEnd();
+        //            try
+        //            {
+        //                JSONarray<JSONfieldObject> arrayObj = JsonUtility.FromJson<JSONarray<JSONfieldObject>>(fileContent); 
+        //                _FieldManager.Load(arrayObj.objects);
+        //            }
+        //            catch (System.Exception e)
+        //            {
+        //                Debug.LogError(fileContent);
+        //                Debug.LogError($"Cannot read JSON: {openFileDialog.FileName} {e.Message}" );
+        //            }
+        //        }  
+        //    }
+        //}
 
     }
 

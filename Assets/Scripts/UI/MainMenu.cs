@@ -1,8 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Zenject;
-using System.Windows.Forms;
+using Zenject; 
 using System.Runtime.InteropServices;
 using Button = UnityEngine.UI.Button;
 
@@ -36,21 +35,6 @@ public class MainMenu : MonoBehaviour
 #else
         UnityEngine.Application.Quit();
 #endif
-    }
-
-    public void InitiateSaving()
-    {
-        _SerializationManager.CreateJSON();
-
-        SaveFileDialog save = new SaveFileDialog();
-        save.ShowDialog();
-        //save.
-    }
-
-    public void InitiateLoading()
-    {
-        OpenFileDialog open = new OpenFileDialog();
-        open.ShowDialog();
-    }
+    } 
 
 }
