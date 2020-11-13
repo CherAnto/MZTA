@@ -30,22 +30,28 @@ public class WebManager : MonoBehaviour
         IEnumerator LoadPageCoroutine()
         {
             float timer = 0;
-            var www =  UnityWebRequest.Get(serverAdress);
+            var www = UnityWebRequest.Get(serverAdress);
+            www.SetRequestHeader("Access-Control-Allow-Credentials", "true");
+            www.SetRequestHeader("Access-Control-Allow-Headers", "Accept, X-Access-Token, X-Application-Name, X-Request-Sent-Time");
+            www.SetRequestHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+            www.SetRequestHeader("Access-Control-Allow-Origin", "*");
             yield return www.SendWebRequest();
-            while (!www.isDone | www.error != null)
-            {
-                timer += Time.deltaTime;
-                if (timer > timeoutSec)
-                    break;
-                yield return null;
-            }
-            timeText = www?.GetResponseHeader("Date"); 
+            //while (!www.isDone | www.error != null)
+            //{
+            //    timer += Time.deltaTime;
+            //    if (timer > timeoutSec)
+            //        break;
+            //    yield return null;
+            //}
+            timeText = www?.GetResponseHeader("Date");
+            ShowText();
             yield return null;
         }
 #else
         CancellationTokenSource s_cts = new CancellationTokenSource();
         CancellationToken c_token = s_cts.Token;
         timeText = await LoadPageAsync();
+        ShowText();
 
         //Chad async
         async Task<string> LoadPageAsync()
@@ -63,14 +69,20 @@ public class WebManager : MonoBehaviour
                 Debug.LogError($"Timer error: requset timeout");
             }
             return www?.GetResponseHeader("Date");
-        }
+        } 
 
 #endif
 
-        if (!timeText.Equals(string.Empty))
+        void ShowText()
         {
-            _UImanager.ShowCurrentTime(timeText);
+            _UImanager.ShowCurrentTime(timeText.Equals(string.Empty) ? "Error" : timeText); 
+            if (!timeText.Equals(string.Empty))
+            {
+                _UImanager.ShowCurrentTime(timeText);
+            }
         }
+
+        
 
 
 

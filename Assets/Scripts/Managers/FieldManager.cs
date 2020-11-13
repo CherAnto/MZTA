@@ -25,7 +25,9 @@ public class FieldManager : MonoBehaviour
         if (to)
         {
             CalculateFieldCoords(); 
-        } 
+        }
+
+        _InputManager.onClick0BeginMiss += () => Select(null, false, false);
     }
 
     public void Move(Vector3 moveBy)
@@ -62,7 +64,7 @@ public class FieldManager : MonoBehaviour
     void Select(IFieldable toSelect, bool state, bool additive)
     {
         //Clear by click on empty space
-        if (toSelect == null)
+        if (toSelect == null )
         {
             DeselectAll();
         }

@@ -58,36 +58,36 @@ public class InputManager : MonoBehaviour
         //Unneded - now syste is based on UI
 
         //Click left
-        //ClickMouseInput2D(Input.GetMouseButtonDown, 0, onClick0BeginUI, onClick0BeginHit, onClick0BeginMiss); 
+        ClickMouseInput2D(Input.GetMouseButtonDown, 0, onClick0BeginUI, onClick0BeginHit, onClick0BeginMiss);
 
-        //void ClickMouseInput2D(System.Func<int, bool> inputcheck, int button, Action onUI, System.Action<GameObject> onObj, Action onMiss)
-        //{
-        //    if (inputcheck(button))
-        //    {
-        //        if (overUI)
-        //        {
-        //            onUI?.Invoke();
-        //        }
-        //        else
-        //        {
-        //            RaycastHit2D hit = Physics2D.Raycast(Input.mousePosition, Vector3.forward);
-        //            if (hit.transform != null)
-        //            {
-        //                onObj?.Invoke(hit.transform.gameObject);
-        //            }
-        //            else
-        //            {
-        //                onMiss?.Invoke();
-        //            }
-        //        }
-        //    }
-        //}
+        void ClickMouseInput2D(System.Func<int, bool> inputcheck, int button, Action onUI, System.Action<GameObject> onObj, Action onMiss)
+        {
+            if (inputcheck(button))
+            {
+                if (overUI)
+                {
+                    onUI?.Invoke();
+                }
+                else
+                {
+                    RaycastHit2D hit = Physics2D.Raycast(Input.mousePosition, Vector3.forward);
+                    if (hit.transform != null)
+                    {
+                        onObj?.Invoke(hit.transform.gameObject);
+                    }
+                    else
+                    {
+                        onMiss?.Invoke();
+                    }
+                }
+            }
+        }
 
-        //void HoldMouseInput(int button, Action onHold)
-        //{
-        //    if (Input.GetMouseButton(button))
-        //        onHold?.Invoke();
-        //}
+        void HoldMouseInput(int button, Action onHold)
+        {
+            if (Input.GetMouseButton(button))
+                onHold?.Invoke();
+        }
 
     }
 
