@@ -24,6 +24,8 @@ public class InputManager : MonoBehaviour
     //Shift
     public bool shiftActive;
 
+    public bool overUI;
+
     public void Initialize(bool toState)
     {
         if (toState)
@@ -51,7 +53,9 @@ public class InputManager : MonoBehaviour
          
         shiftActive = (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift));  
 
-        bool overUI = _eventSystem.IsPointerOverGameObject();
+        overUI = _eventSystem.IsPointerOverGameObject();
+
+        //Unneded - now syste is based on UI
 
         //Click left
         //ClickMouseInput2D(Input.GetMouseButtonDown, 0, onClick0BeginUI, onClick0BeginHit, onClick0BeginMiss); 

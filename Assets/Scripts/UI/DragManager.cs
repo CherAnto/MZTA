@@ -64,8 +64,9 @@ public class DragManager : MonoBehaviour
     public void FinishDrag()
     {
         _currentCaller.color = _currentCaller.color.ChangeA(1);
+        _toolbar.gameObject.SetActive(false);
+            if(!_InputManager.overUI)
         _FieldManager.CreateFieldItem(_currentCaller.sprite);
         _currentCaller = null;
-        _toolbar.gameObject.SetActive(false);
     } 
 }
