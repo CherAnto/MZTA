@@ -34,7 +34,7 @@ public class SerializationManager : MonoBehaviour
         List<IFieldable> fieldables = _FieldManager.AllFieldables;
         for (int i = 0; i < fieldables.Count; i++)
         {
-            arrayObj.objects.Add(new JSONfieldObject(fieldables[i].sprite.name, fieldables[i].scale, fieldables[i].position, fieldables[i].pixelSize));
+            arrayObj.objects.Add(new JSONfieldObject(fieldables[i].sprite.name, fieldables[i].scale, fieldables[i].position, fieldables[i].pixelSize, fieldables[i].color));
         } 
         var jsontxt = JsonUtility.ToJson(arrayObj); 
         return jsontxt;
@@ -42,57 +42,51 @@ public class SerializationManager : MonoBehaviour
 
     public void Save()
     {
-        string json = CreateJSON();
+        try
+        {
+            string json = CreateJSON();
         //string path = EditorUtility.OpenFilePanel("new save", "", ".txt"); 
         string path = StandaloneFileBrowser.SaveFilePanel("Save File", Application.dataPath, "new save", "txt");// (string path) => {
              
             using (StreamWriter writer = new StreamWriter(path))
             {
                 writer.Write(json);
-            }  
-
-        //});
-
-        //if(saveFileDialog == null)
-        //{
-        //    Debug.LogError("Dialog is null");
-        //    return;
-        //}
-        //if (saveFileDialog.ShowDialog() == DialogResult.Cancel)
-        //    return;
-        //if (saveFileDialog.ShowDialog() == DialogResult.OK)
-        //{ 
-        //    System.IO.FileStream fs =
-        //        (System.IO.FileStream)saveFileDialog.OpenFile();
-        //    using (StreamWriter writer = new StreamWriter(fs))
-        //    {
-        //        writer.Write(json);
-        //    }
-        //    fs.Close();
-        //} 
+            }
+    }
+        catch (System.Exception e)
+        {
+            Debug.LogError(e.Message);
+        }
     }
 
     public void Load()
     {
+        try
+        {
+            StandaloneFileBrowser.OpenFilePanelAsync("Open File", Application.dataPath, "txt", false, (string[] path) => {
 
-        StandaloneFileBrowser.OpenFilePanelAsync("Open File", Application.dataPath, "txt", false, (string[] path) => {
-
-            using (StreamReader reader = new StreamReader(path[0]))
-            {
-                var fileContent = reader.ReadToEnd();
-                try
+                using (StreamReader reader = new StreamReader(path[0]))
                 {
-                    JSONarray<JSONfieldObject> arrayObj = JsonUtility.FromJson<JSONarray<JSONfieldObject>>(fileContent);
-                    _FieldManager.Load(arrayObj.objects);
+                    var fileContent = reader.ReadToEnd();
+                    try
+                    {
+                        JSONarray<JSONfieldObject> arrayObj = JsonUtility.FromJson<JSONarray<JSONfieldObject>>(fileContent);
+                        _FieldManager.Load(arrayObj.objects);
+                    }
+                    catch (System.Exception e)
+                    {
+                        Debug.LogError(fileContent);
+                        Debug.LogError($"Cannot read JSON: {path[0]} {e.Message}");
+                    }
                 }
-                catch (System.Exception e)
-                {
-                    Debug.LogError(fileContent);
-                    Debug.LogError($"Cannot read JSON: {path[0]} {e.Message}");
-                }
-            }
 
-        });
+            });
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError(e.Message);
+        }
+        
 
         //OpenFileDialog openFileDialog = new OpenFileDialog();
         //openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
@@ -134,13 +128,15 @@ public class SerializationManager : MonoBehaviour
         public Vector3 scale;
         public Vector3 position;
         public Vector3 pixelSize;
+        public Color color;
 
-        public JSONfieldObject(string spriteName, Vector3 scale, Vector3 position, Vector3 pixelSize)
+        public JSONfieldObject(string spriteName, Vector3 scale, Vector3 position, Vector3 pixelSize, Color color)
         {
             this.spriteName = spriteName;
             this.scale = scale;
             this.position = position;
             this.pixelSize = pixelSize;
+            this.color = color;
         }
     }
 } 

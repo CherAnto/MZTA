@@ -45,6 +45,7 @@ public class FieldManager : MonoBehaviour
 
     public void Load(List<JSONfieldObject> objs)
     {
+        ClearField();
         for (int i = 0; i < objs.Count; i++)
         {
             JSONfieldObject current = objs[i];
@@ -54,7 +55,7 @@ public class FieldManager : MonoBehaviour
                 Debug.LogError($"Unknown sprite: {current.spriteName}");
                 continue; 
             }
-            CreateFieldItem(sprite, current.scale, current.position, current.pixelSize);
+            CreateFieldItem(sprite, current.scale, current.position, current.pixelSize, current.color);
         }
     }
 
@@ -141,10 +142,10 @@ public class FieldManager : MonoBehaviour
 
     public void CreateFieldItem(Sprite sprite)
     {  
-        CreateFieldItem(sprite, Vector3.one, _UImanager.dragManager.GetCenteredToolbarPosition(), _UImanager.dragManager.GetToolbarSize()); 
+        CreateFieldItem(sprite, Vector3.one, _UImanager.dragManager.GetCenteredToolbarPosition(), _UImanager.dragManager.GetToolbarSize(), Color.white); 
     }
 
-    public IFieldable CreateFieldItem(Sprite sprite, Vector3 scale, Vector3 position, Vector3 pixelSize)
+    public IFieldable CreateFieldItem(Sprite sprite, Vector3 scale, Vector3 position, Vector3 pixelSize, Color color)
     {
         IFieldable fieldable = _itemPool.Get();
         _Container.Inject(fieldable);

@@ -27,6 +27,8 @@ public class FieldItem : PoolableObj, IFieldable
 
     public Vector2 pixelSize => new Vector2(transform.rect.width, transform.rect.height);
 
+    public Color color => image.color;
+
     public void Move(Vector3 moveBy)
     {
         transform.anchoredPosition += (Vector2) moveBy;

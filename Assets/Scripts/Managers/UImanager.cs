@@ -10,12 +10,13 @@ public class UImanager : MonoBehaviour
     public DragManager dragManager => _DragManager;
     [SerializeField] DragManager _DragManager;
 
-    [SerializeField] SelectionMetric metric;
+    [SerializeField] SelectionMetric selectionmetric;
+    [SerializeField] Text timeMetric;
 
     public void Initialize(bool to)
     {
         _DragManager.Initialize();
-        metric.Initialize(to);
+        selectionmetric.Initialize(to);
     }
 
     public (Vector2,Vector2) CalculateFieldSize()
@@ -29,6 +30,12 @@ public class UImanager : MonoBehaviour
             _fieldPanel.gameObject.GetComponent<Image>().enabled = false;
         return (new Vector2(_fieldPanel.anchorMin.x * Screen.width, _fieldPanel.anchorMin.y * Screen.height)
             , new Vector2(_fieldPanel.anchorMax.x * Screen.width, _fieldPanel.anchorMax.y * Screen.height)); 
+    }
+
+    public void ShowCurrentTime(string time)
+    {
+        timeMetric.gameObject.SetActive(true);
+        timeMetric.text = $"Current time: {time}" ;
     }
 
     

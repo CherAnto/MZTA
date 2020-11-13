@@ -35,6 +35,6 @@ public class MainMenu : MonoBehaviour
 #else
         UnityEngine.Application.Quit();
 #endif
-    } 
+    }  
 
 }
