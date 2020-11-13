@@ -11,6 +11,7 @@ public class BaseInstaller : MonoInstaller
     [SerializeField] FieldManager _fieldManager;
     [SerializeField] UImanager _uimanager;
     [SerializeField] SerializationManager _SerializationManager;
+    [SerializeField] WebManager _WebManager;
 
     public override void InstallBindings()
     {
@@ -27,6 +28,8 @@ public class BaseInstaller : MonoInstaller
         Container.Bind<FieldManager>().FromInstance(_fieldManager).AsSingle().NonLazy();
         Container.Bind<UImanager>().FromInstance(_uimanager).AsSingle().NonLazy();
         Container.Bind<SerializationManager>().FromInstance(_SerializationManager).AsSingle().NonLazy();
+        Container.Bind<WebManager>().FromInstance(_WebManager).AsSingle().NonLazy();
+
 
     } 
 }
