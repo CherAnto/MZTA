@@ -155,7 +155,7 @@ public class FieldManager : MonoBehaviour
         fieldable.SetPosition(position);
         fieldable.SetSprite(sprite);
         fieldable.SetPixelSize(pixelSize);
-        fieldable.SetColor(Color.white);
+        fieldable.SetColor(color);
         all.Add(fieldable);
         return fieldable;
     }
