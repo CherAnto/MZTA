@@ -6,18 +6,20 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Zenject;
 
-public class FieldItem : PoolableObj, IFieldable
+public class FieldItem : MonoBehaviour, Ipoolable, IFieldable
 {
     [Inject] FieldManager _FieldManager;
-    [Inject] InputManager _InputManager;
-    [Inject] Pool<FieldItem> localPool;
+    [Inject] InputManager _InputManager; 
 
     [SerializeField] EventTrigger _evtrigger;
     RectTransform transform;
     Image image;
     ParticleSystem partS;
+    [SerializeField] bool _ReadyForSelection = true;
 
     bool initialized;
+
+    public GameObject GetGameobject => gameObject;
 
     public Sprite sprite => image.sprite;
 
@@ -28,6 +30,8 @@ public class FieldItem : PoolableObj, IFieldable
     public Vector2 pixelSize => new Vector2(transform.rect.width, transform.rect.height);
 
     public Color color => image.color;
+
+    
 
     public void Move(Vector3 moveBy)
     {
@@ -81,6 +85,8 @@ public class FieldItem : PoolableObj, IFieldable
 
         AddToEvent(EventTriggerType.PointerClick, new UnityAction<BaseEventData>(Select));
         AddToEvent(EventTriggerType.Drag, delegate { _FieldManager.Move(_InputManager.mouseMovement); }/* new UnityAction<BaseEventData>(Move)*/);
+        AddToEvent(EventTriggerType.BeginDrag, delegate { _ReadyForSelection = false; }/* new UnityAction<BaseEventData>(Move)*/);
+        AddToEvent(EventTriggerType.EndDrag, delegate { StartCoroutine(WaitForEndOfFrame()); }/* new UnityAction<BaseEventData>(Move)*/);
 
         initialized = true;
 
@@ -115,12 +121,13 @@ public class FieldItem : PoolableObj, IFieldable
 
     public void Select(BaseEventData eData)
     {
-        _FieldManager.ProcessSelection(this);
+        Select();
     }
 
     public void Select()
     {
         //Relies on event system, for now NI
+        if(_ReadyForSelection)
         _FieldManager.ProcessSelection(this);
     }
 
@@ -130,5 +137,21 @@ public class FieldItem : PoolableObj, IFieldable
         emission.enabled = state;
         if (!state)
             partS.Clear();
-    } 
+    }
+
+    public void Activate()
+    {
+        Debug.Log("Coming FROM pool!");
+    }
+
+    public void Deactivate()
+    {
+        Debug.Log("Going TO pool!");
+    }
+
+    IEnumerator WaitForEndOfFrame()
+    {
+        yield return new WaitForSecondsRealtime(0.1f);
+        _ReadyForSelection = true; 
+    }
 }

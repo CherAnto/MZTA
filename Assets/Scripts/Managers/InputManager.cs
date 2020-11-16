@@ -1,12 +1,15 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using Zenject;
 using Action = System.Action;
 
 public class InputManager : MonoBehaviour
 {
     [Inject] GameManager _GameManager;
-    EventSystem _eventSystem;
+    [SerializeField] EventSystem _eventSystem;
+    [SerializeField] GraphicRaycaster graphicRaycaster;
 
     public Vector3 mousePosition => _mousePosition;
     Vector3 _mousePosition;
@@ -24,7 +27,8 @@ public class InputManager : MonoBehaviour
     //Shift
     public bool shiftActive;
 
-    public bool overUI;
+    public bool overUI => _overUI;
+    [SerializeField] bool _overUI;
 
     public void Initialize(bool toState)
     {
@@ -41,9 +45,9 @@ public class InputManager : MonoBehaviour
             _eventSystem = FindObjectOfType<EventSystem>();
 
 #if UNITY_EDITOR
-        onClick0BeginUI += () => Debug.LogError("UI");
-        onClick0BeginHit += (GameObject obj) => Debug.LogError($"Hit: {obj.name}");
-        onClick0BeginMiss += () => Debug.LogError("Miss");
+        onClick0BeginUI += () => Debug.Log("UI");
+        onClick0BeginHit += (GameObject obj) => Debug.Log($"Hit: {obj.name}");
+        onClick0BeginMiss += () => Debug.Log("Miss");
 #endif
     }
 
@@ -51,9 +55,29 @@ public class InputManager : MonoBehaviour
     {
         CalculatePositions();
          
-        shiftActive = (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift));  
+        shiftActive = (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift));
 
-        overUI = _eventSystem.IsPointerOverGameObject();
+        _overUI = false;
+        List<RaycastResult> raycastResults = new List<RaycastResult>();
+        PointerEventData _PEData = new PointerEventData(_eventSystem);
+        _PEData.position = _mousePosition;
+        graphicRaycaster.Raycast(_PEData, raycastResults);
+        if (raycastResults.Count > 0)
+        {
+            bool anyUIcatcher = false;
+            if (raycastResults != null)
+            {
+                for (int i = 0; i < raycastResults.Count; i++)
+                { 
+                    if (raycastResults[i].gameObject.layer != (int)LayerManager.Layers.UI_Ignore)
+                    {
+                        anyUIcatcher = true;
+                        break;
+                    }
+                }
+            }
+            _overUI = anyUIcatcher;
+        }
 
         //Unneded - now syste is based on UI
 

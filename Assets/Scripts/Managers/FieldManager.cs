@@ -10,7 +10,7 @@ public class FieldManager : MonoBehaviour
     [Inject] UImanager _UImanager;
     [Inject] InputManager _InputManager; 
     [Inject] DiContainer _Container;
-    [Inject] Pool<FieldItem> _itemPool;
+    [Inject] Pool<IFieldable> _itemPool;
     [Inject] SerializationManager _SerializationManager;
 
     public List<IFieldable> Selected => new List<IFieldable>(selected);
@@ -79,8 +79,14 @@ public class FieldManager : MonoBehaviour
             }
             else
             {
+                //if(selected.Contains(toSelect))
                 if (selected.Count > 0 || !state)
-                    DeselectAll();
+                    DeselectAll(toSelect);
+                    //else
+                    //{
+                    //state = !state;
+                    //}
+                    
                 if (state)
                     ConsumateSelection();
 
@@ -98,13 +104,18 @@ public class FieldManager : MonoBehaviour
         }
     }
 
-    public void DeselectAll()
-    {
-        for (int i = 0; i < selected.Count; i++)
+    public void DeselectAll(IFieldable except = null)
+    { 
+        for (int i = selected.Count-1; i > -1; i--)
         {
-            selected[i].ShowSelection(false);
-        }
-        selected = new List<IFieldable>();
+            if (except!=null && selected[i] != except)
+            {
+                selected[i].ShowSelection(false);
+                selected.RemoveAt(i);
+            }
+            else
+                continue;
+        } 
     }
 
     public void DeleteSelected()
@@ -165,7 +176,7 @@ public class FieldManager : MonoBehaviour
     public void Destroy(IFieldable item)
     {
         item.ShowSelection(false);
-        _itemPool.Remove((FieldItem)item); //:( TODO TODO TODO!!!
+        _itemPool.Remove(item);
     }
 
     void CalculateFieldCoords() {

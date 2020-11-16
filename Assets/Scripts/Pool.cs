@@ -1,42 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Zenject;
+using Zenject;  
 
-public abstract class PoolableObj : MonoBehaviour
-{
-    public event System.Action<PoolableObj> onActive;
-    public event System.Action<PoolableObj> onDisable; 
-
-    public virtual void Activate()
-    {
-        gameObject.SetActive(true);
-        onActive.Invoke(this);
-    }
-
-    public virtual void Deactivate()
-    {
-        gameObject.SetActive(false);
-        onDisable.Invoke(this);
-    }
-}
-
-public interface Ipoolable
-{
-    System.Action<PoolableObj> onActive { get; set; }
-    System.Action<PoolableObj> onDisable { get; set; }
-
-    Ipoolable Create();
+public interface Ipoolable:IGameObject
+{    
     void Initialize();
     void Activate();
     void Deactivate();
 }
 
 [System.Serializable]
-public class Pool<T> where T : PoolableObj
+public class Pool<T> where T : Ipoolable
 {
     List<T> _disabled, _enabled;
-    T _PreFab;
+    GameObject _PreFab;
     [Inject] DiContainer _DIContainer;
 
     public int Length => _disabled.Count + _enabled.Count;
@@ -59,7 +37,7 @@ public class Pool<T> where T : PoolableObj
 
     }
 
-    public void Initialize(T PF, int baseL, DiContainer container)
+    public void Initialize(GameObject PF, int baseL, DiContainer container)
     {
         _DIContainer = container;
         _disabled = new List<T>();
@@ -75,46 +53,52 @@ public class Pool<T> where T : PoolableObj
     public T Get()
     {
         T output;
-        for (int i = 0; i < _disabled.Count; i++)
-        {
-            output = _disabled[i];
-            _disabled[i].Activate();
-            return output;
-        }
-        output = InstantiateNew();
+        if(_disabled.Count>0)
+            output = _disabled[0];
+        else
+            output = InstantiateNew();
+
+        //for (int i = 0; i < _disabled.Count; i++)
+        //{
+        //    output = _disabled[i];
+        //    _disabled[i].Activate();
+        //    return output;
+        //}
+        //output = InstantiateNew();
         output.Activate();
+        MoveToPool(true, output);
         return output;
     }
 
     public void Remove(T item)
     {
-        item.Deactivate(); 
+        item.Deactivate();
+        MoveToPool(false, item);
     }
 
     T InstantiateNew()
     {
-        T local = GameObject.Instantiate(_PreFab);
-        _DIContainer.Inject(local); 
-        local.onActive += OnEnable;
-        local.onDisable += OnDisable;
-        local.Deactivate();
+        T local;
+        GameObject localGO;
+        try
+        {
+            localGO = GameObject.Instantiate(_PreFab);
+            local = localGO.GetComponent<T>();
+            _DIContainer.Inject(localGO);
+            MoveToPool(false, local);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Pool can't be initialized: {e.Message}");
+            //No point in proceeding any further
+            throw e;
+        }
         return local;
-    }
-
-    void OnEnable(PoolableObj obj)
-    {
-        _enabled.Add((T)obj);
-        _disabled.Remove((T)obj);
-    }
-
-    void OnDisable(PoolableObj obj)
-    {
-        _disabled.Add((T)obj);
-        _enabled.Remove((T)obj);
-    }
+    } 
 
     void MoveToPool(bool state, T obj)
     {
+        obj.GetGameobject.SetActive(state);
         if (state)
         {
             _enabled.Add(obj);

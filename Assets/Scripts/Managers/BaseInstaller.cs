@@ -17,10 +17,10 @@ public class BaseInstaller : MonoInstaller
     {
         Container.Bind<Prefab_Refs>().FromInstance(ui_refs).AsSingle().NonLazy();
 
-        Pool<FieldItem> pool = new Pool<FieldItem>(); 
-        pool.Initialize(ui_refs.ItemPF.GetComponent<FieldItem>(),0, Container);
+        Pool<IFieldable> pool = new Pool<IFieldable>(); 
+        pool.Initialize(ui_refs.ItemPF,0, Container);
 
-        Container.Bind<Pool<FieldItem>>().FromInstance(pool).AsSingle().NonLazy();
+        Container.Bind<Pool<IFieldable>>().FromInstance(pool).AsSingle().NonLazy();
 
 
         Container.Bind<GameManager>().FromInstance(_gameManager).AsSingle().NonLazy();
