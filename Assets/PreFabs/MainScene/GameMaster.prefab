@@ -1,0 +1,136 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8635920773939495820
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8635920773939495920}
+  - component: {fileID: 8635920773939495921}
+  - component: {fileID: 8635920773939495822}
+  - component: {fileID: 8635920773939495823}
+  - component: {fileID: 8635920773939495923}
+  - component: {fileID: 8635920773939495922}
+  - component: {fileID: 8635920773939495925}
+  - component: {fileID: 8635920773939495924}
+  m_Layer: 0
+  m_Name: GameMaster
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8635920773939495920
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8635920773939495820}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.476767, y: 1.6354758, z: -8.039618}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8635920773939495921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8635920773939495820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e65c8a4e176840346b5404d999e497ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8635920773939495822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8635920773939495820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1ffbb8f03020cc4084272c239663054, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _eventSystem: {fileID: 0}
+  graphicRaycaster: {fileID: 0}
+  shiftActive: 0
+  _overUI: 0
+--- !u!114 &8635920773939495823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8635920773939495820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d86b8900293b47440a390188eb84b667, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _fieldPanel: {fileID: 0}
+  _DragManager: {fileID: 8635920773939495922}
+  _selectionmetric: {fileID: 0}
+  timeMetric: {fileID: 0}
+--- !u!114 &8635920773939495923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8635920773939495820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b8833faf34516f4595e99e80d14f5a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8635920773939495922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8635920773939495820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 334dc01a19c9fb34d9a2a753adc95946, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _toolbar: {fileID: 0}
+--- !u!114 &8635920773939495925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8635920773939495820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a892fab5be763504e934b9acd940cfef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SpritesPath: 
+  SpritesNumber: 0
+--- !u!114 &8635920773939495924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8635920773939495820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb3729bc956a7c549a3fbf87a377b27d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serverAdress: http://www.microsoft.com
+  timeoutSec: 10

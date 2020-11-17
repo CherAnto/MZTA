@@ -10,13 +10,14 @@ public class UImanager : MonoBehaviour
     public DragManager dragManager => _DragManager;
     [SerializeField] DragManager _DragManager;
 
-    [SerializeField] SelectionMetric selectionmetric;
+    public SelectionMetric selectionmetric => _selectionmetric;
+    [SerializeField] SelectionMetric _selectionmetric;
     [SerializeField] Text timeMetric;
 
     public void Initialize(bool to)
     {
         _DragManager.Initialize();
-        selectionmetric.Initialize(to);
+        _selectionmetric.Initialize(to);
     }
 
     public (Vector2,Vector2) CalculateFieldSize()

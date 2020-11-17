@@ -101,6 +101,7 @@ public class FieldManager : MonoBehaviour
             else
                 selected.Remove(toSelect);
             toSelect.ShowSelection(state);
+            _UImanager.selectionmetric.UpdateText();
         }
     }
 
@@ -108,14 +109,15 @@ public class FieldManager : MonoBehaviour
     { 
         for (int i = selected.Count-1; i > -1; i--)
         {
-            if (except!=null && selected[i] != except)
+            if (except==null || selected[i] != except)
             {
                 selected[i].ShowSelection(false);
                 selected.RemoveAt(i);
             }
             else
                 continue;
-        } 
+        }
+        _UImanager.selectionmetric.UpdateText();
     }
 
     public void DeleteSelected()
