@@ -14,7 +14,8 @@ public class FieldManager : MonoBehaviour
     [Inject] SerializationManager _SerializationManager;
 
     public List<IFieldable> Selected => new List<IFieldable>(selected);
-    [SerializeField] List<IFieldable> selected = new List<IFieldable>();
+    List<IFieldable> selected { get { return _selected; } set { _selected = value; _UImanager.selectionmetric.UpdateText(); } }
+    [SerializeField] List<IFieldable> _selected = new List<IFieldable>();
     public List<IFieldable> AllFieldables => new List<IFieldable>(all);
     [SerializeField] List<IFieldable> all = new List<IFieldable>();
 
@@ -126,7 +127,7 @@ public class FieldManager : MonoBehaviour
         {
             Destroy(selected[i]);
         }
-        selected = new List<IFieldable>();
+        _UImanager.selectionmetric.UpdateText();
     }
 
     public void ClearField()
@@ -136,7 +137,7 @@ public class FieldManager : MonoBehaviour
             Destroy(all[i]);
         }
         all = new List<IFieldable>();
-        selected = new List<IFieldable>();
+        _UImanager.selectionmetric.UpdateText();
     }
 
     public void ChangeColor(Color c)
